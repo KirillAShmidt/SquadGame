@@ -6,49 +6,41 @@ using System.Collections.Generic;
 
 public class Enemy : Actor
 {
-    public float hitDistance;
-    public float duration;
-
-    private float _currentHealth;
-
-    public EnemyState currentState;
-    public EnemyStateIdle idleState;
-    public EnemyStateFighting fightingState;
-
-    public Animator _animator;
-    public readonly string IDLE = "idle";
-    public readonly string WALK = "walk";
-    public readonly string ATTACK = "attack";
-
-    public Action<Enemy> OnEnemyDied;
-
     private void Start()
     {
-        idleState = new EnemyStateIdle(this);
-        fightingState = new EnemyStateFighting(this);
-
-        currentState = idleState;
+        _currentState = _actorStateIdle;
 
         GetComponent<SelectableObject>().OnSelected += Die;
     }
 
     public void FixedUpdate()
     {
-        currentState.Update();
+        _currentState.Update();
     }
 
     public override void Attack()
     {
         base.Attack();
-        _animator.SetTrigger(ATTACK);
     }
 
-    public void MoveToTarget()
+    public override void Move()
     {
-        agent.SetDestination(Target.transform.position);
+        if(Target == null)
+        {
+            FindTarget();
+        }
+        else
+        {
+            agent.SetDestination(Target.transform.position);
+
+            if(CheckDistance())
+                StateFighting();
+            else
+                StateMoving();
+        }
     }
 
-    public void FindTarget()
+    public override void FindTarget()
     {
         var characters = GridManager.Instance.characterList;
 
@@ -71,14 +63,21 @@ public class Enemy : Actor
 
     public override void Die()
     {
-        OnEnemyDied?.Invoke(this);
+        WayPoint.ActiveWaypoint.DeleteEnemy(this);
         Destroy(gameObject);
     }
 
     public void StateFighting()
     {
-        currentState.Exit();
-        currentState = fightingState;
-        currentState.Enter();
+        _currentState.Exit();
+        _currentState = _actorStateFighting;
+        _currentState.Enter();
+    }
+
+    public void StateMoving()
+    {
+        _currentState.Exit();
+        _currentState = _actorStateMoving;
+        _currentState.Enter();
     }
 }

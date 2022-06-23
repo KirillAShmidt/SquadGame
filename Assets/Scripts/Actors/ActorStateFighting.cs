@@ -9,26 +9,24 @@ public class ActorStateFighting : ActorState
 
     private float _currentTime;
 
-    public ActorStateFighting(Character character) : base(character)
+    public ActorStateFighting(Actor actor) : base(actor)
     {
-        this.character = character;
+        this.actor = actor;
     }
 
     public override void Enter()
     {
-        _currentTime = character.duration;
+        _currentTime = actor.duration;
         enemies = WayPoint.ActiveWaypoint.enemies;
     }
 
     public override void Update()
     {
-        if (character.Target == null && GridManager.Instance.characterList.Count > 0)
-            FindTarget();
+        if (actor.Target == null)
+            actor.FindTarget();
 
-        if (character.Target != null)
+        if (actor.Target != null)
         {
-            MoveToTarget();
-
             if (CheckDistance())
             {
                 Tick();
@@ -40,35 +38,19 @@ public class ActorStateFighting : ActorState
     {
     }
 
-    private void FindTarget()
-    {
-        var targets = enemies;
-
-        if (targets != null)
-        {
-            character.Target = targets[UnityEngine.Random.Range(0, targets.Count)];
-            character.Target.OnActorDestroyed += FindTarget;
-        }
-    }
-
     private void Tick()
     {
         _currentTime -= Time.deltaTime;
 
         if (_currentTime <= 0)
         {
-            _currentTime = character.duration;
-            character.Attack();
+            _currentTime = actor.duration;
+            actor.Attack();
         }
-    }
-
-    public void MoveToTarget()
-    {
-        character.agent.SetDestination(character.Target.transform.position);
     }
 
     private bool CheckDistance()
     {
-        return Vector3.Distance(character.transform.position, character.Target.transform.position) < character.hitDistance;
+        return Vector3.Distance(actor.transform.position, actor.Target.transform.position) < actor.hitDistance;
     }
 }

@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class ActorStateIdle : ActorState
 {
-    public ActorStateIdle(Character character) : base(character)
+    public ActorStateIdle(Actor actor) : base(actor)
     {
-        this.character = character;
+        this.actor = actor;
     }
 
     public override void Enter()

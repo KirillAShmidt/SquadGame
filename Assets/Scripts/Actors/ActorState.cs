@@ -3,11 +3,11 @@ using UnityEngine.AI;
 
 public abstract class ActorState
 {
-    public Character character;
+    public Actor actor;
 
-    public ActorState(Character character)
+    public ActorState(Actor actor)
     {
-        this.character = character;
+        this.actor = actor;
     }
 
     public abstract void Enter();

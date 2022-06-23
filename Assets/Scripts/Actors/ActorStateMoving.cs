@@ -3,9 +3,9 @@ using UnityEngine.AI;
 
 public class ActorStateMoving : ActorState
 {
-    public ActorStateMoving(Character character) : base(character)
+    public ActorStateMoving(Actor actor) : base(actor)
     {
-        this.character = character;
+        this.actor = actor;
     }
 
     public override void Enter()
@@ -15,10 +15,7 @@ public class ActorStateMoving : ActorState
 
     public override void Update()
     {
-        if (character.GridPosition != null)
-        {
-            character.agent.SetDestination(character.GridPosition.position);
-        }
+        actor.Move();
     }
 
     public override void Exit()

@@ -10,26 +10,54 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
     [SerializeField] protected float _maxHealth;
     [SerializeField] protected float _damage;
 
-    public Actor Target { get; set; }
+    public float duration;
+    public float hitDistance;
+    public NavMeshAgent agent;
 
+    protected float _currentHealth;
     protected SelectableObject _selectable;
 
-    public NavMeshAgent agent;
+    protected ActorStateFighting _actorStateFighting;
+    protected ActorStateIdle _actorStateIdle;
+    protected ActorStateMoving _actorStateMoving;
+    protected ActorState _currentState;
+
+    public readonly string WALK = "walk";
+    public readonly string FIGHT = "fight";
+    public readonly string DIE = "die";
+
+    public Actor Target { get; set; }
 
     public Action OnActorDestroyed;
 
+    private void Awake()
+    {
+        _selectable = GetComponent<SelectableObject>();
+        _selectable.OnSelected += Die;
+
+        _actorStateFighting = new ActorStateFighting(this);
+        _actorStateIdle = new ActorStateIdle(this);
+        _actorStateMoving = new ActorStateMoving(this);
+
+        _currentState = _actorStateIdle;
+        _currentState.Enter();
+
+        agent = GetComponent<NavMeshAgent>();
+    }
+
     public abstract void TakeDamage(float damage);
+    public abstract void Die();
+    public abstract void Move();
+    public abstract void FindTarget();
+
     public virtual void Attack()
     {
         Debug.Log(gameObject.name + " hit " + Target.name);
         Target.TakeDamage(_damage);
     }
-    public abstract void Die();
 
-    private void Start()
+    public bool CheckDistance()
     {
-        agent = GetComponent<NavMeshAgent>();
-
-        _selectable = GetComponent<SelectableObject>();
+        return Vector3.Distance(transform.position, Target.transform.position) < hitDistance;
     }
 }

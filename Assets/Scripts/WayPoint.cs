@@ -11,17 +11,6 @@ public class WayPoint : MonoBehaviour
     public Action OnWayPointCompleted;
     public int index;
 
-    private void Start()
-    {
-        if(enemies.Count != 0)
-        {
-            foreach(Enemy enemy in enemies)
-            {
-                enemy.OnEnemyDied += DeleteEnemy;
-            }
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponent<GridManager>();
@@ -43,7 +32,7 @@ public class WayPoint : MonoBehaviour
         }
     }
 
-    private void DeleteEnemy(Enemy enemy)
+    public void DeleteEnemy(Enemy enemy)
     {
         enemies.Remove(enemy);
 
@@ -57,7 +46,7 @@ public class WayPoint : MonoBehaviour
     {
         foreach(Enemy enemy in enemies)
         {
-            enemy.StateFighting();
+            enemy.StateMoving();
         }
     }
 

@@ -7,37 +7,7 @@ using System;
 [RequireComponent(typeof(NavMeshAgent), typeof(SelectableObject))]
 public class Character : Actor
 {
-    public float duration;
-    public float hitDistance;
-
-    private float _currentHealth;
-
-    private ActorStateFighting actorStateFighting;
-    private ActorStateIdle actorStateIdle;
-    private ActorStateMoving actorStateMoving;
-    private ActorState _currentState;
-
-    public readonly string WALK = "walk";
-    public readonly string FIGHT = "fight";
-    public readonly string DIE = "die";
-
-
     public Transform GridPosition { get; set; }
-
-    private void Awake()
-    {
-        _selectable = GetComponent<SelectableObject>();
-        _selectable.OnSelected += Die;
-
-        actorStateFighting = new ActorStateFighting(this);
-        actorStateIdle = new ActorStateIdle(this);
-        actorStateMoving = new ActorStateMoving(this);
-
-        _currentState = actorStateIdle;
-        _currentState.Enter();
-
-        agent = GetComponent<NavMeshAgent>();
-    }
 
     private void Start()
     {
@@ -47,15 +17,26 @@ public class Character : Actor
     public void StateWalking()
     {
         _currentState.Exit();
-        _currentState = actorStateMoving;
+        _currentState = _actorStateMoving;
         _currentState.Enter();
     }
 
     public void StateFighting()
     {
         _currentState.Exit();
-        _currentState = actorStateFighting;
+        _currentState = _actorStateFighting;
         _currentState.Enter();
+    }
+
+    public override void FindTarget()
+    {
+        var targets = WayPoint.ActiveWaypoint.enemies;
+
+        if (targets != null)
+        {
+            Target = targets[UnityEngine.Random.Range(0, targets.Count)];
+            Target.OnActorDestroyed += FindTarget;
+        }
     }
 
     public override void Attack()
@@ -70,6 +51,14 @@ public class Character : Actor
         if(_currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    public override void Move() 
+    {
+        if (GridPosition != null)
+        {
+            agent.SetDestination(GridPosition.position);
         }
     }
 
