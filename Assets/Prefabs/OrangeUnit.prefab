@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 10
-  _damage: 0
+  _damage: 10
   duration: 3
   hitDistance: 2
   agent: {fileID: 5805616590286177020}
@@ -129,7 +129,7 @@ Animator:
   m_GameObject: {fileID: 2852598420827694776}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: fa7f36c71b9e8fa4798df3a931c2fd92, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4146b1c54b446dd4d92eb9d487177dd0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

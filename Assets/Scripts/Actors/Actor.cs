@@ -22,8 +22,9 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
     protected ActorStateMoving _actorStateMoving;
     protected ActorState _currentState;
 
+    public readonly string IDLE = "idle";
     public readonly string WALK = "walk";
-    public readonly string FIGHT = "fight";
+    public readonly string ATTACK = "attack";
     public readonly string DIE = "die";
 
     public Actor Target { get; set; }
@@ -43,6 +44,8 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
         _currentState.Enter();
 
         agent = GetComponent<NavMeshAgent>();
+
+        _currentHealth = _maxHealth;
     }
 
     public abstract void TakeDamage(float damage);
@@ -52,12 +55,7 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
 
     public virtual void Attack()
     {
-        Debug.Log(gameObject.name + " hit " + Target.name);
+        Debug.Log(gameObject.name + " hit " + Target.name + " with " + _damage);
         Target.TakeDamage(_damage);
-    }
-
-    public bool CheckDistance()
-    {
-        return Vector3.Distance(transform.position, Target.transform.position) < hitDistance;
     }
 }

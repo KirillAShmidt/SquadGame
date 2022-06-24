@@ -8,7 +8,6 @@ public class Enemy : Actor
 {
     private void Start()
     {
-        _currentState = _actorStateIdle;
 
         GetComponent<SelectableObject>().OnSelected += Die;
     }
@@ -33,10 +32,10 @@ public class Enemy : Actor
         {
             agent.SetDestination(Target.transform.position);
 
-            if(CheckDistance())
+            if (CheckDistance())
                 StateFighting();
-            else
-                StateMoving();
+            /*else
+                StateMoving();*/
         }
     }
 
@@ -48,7 +47,15 @@ public class Enemy : Actor
         {
             Target = characters[UnityEngine.Random.Range(0, characters.Count)];
             Target.OnActorDestroyed += FindTarget;
+            Target.OnActorDestroyed += StateMoving;
+
+            //StateMoving();
         }
+    }
+
+    public bool CheckDistance()
+    {
+        return Vector3.Distance(transform.position, Target.transform.position) < hitDistance;
     }
 
     public override void TakeDamage(float damage)
@@ -72,12 +79,20 @@ public class Enemy : Actor
         _currentState.Exit();
         _currentState = _actorStateFighting;
         _currentState.Enter();
+        Attack();
     }
 
     public void StateMoving()
     {
         _currentState.Exit();
         _currentState = _actorStateMoving;
+        _currentState.Enter();
+    }
+
+    public void StateIdle()
+    {
+        _currentState.Exit();
+        _currentState = _actorStateIdle;
         _currentState.Enter();
     }
 }

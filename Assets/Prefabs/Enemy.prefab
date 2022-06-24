@@ -47,11 +47,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.23
-  m_Speed: 2
+  m_Speed: 4
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 720
-  m_StoppingDistance: 1
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -116,10 +116,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 12
   _damage: 12
-  agent: {fileID: 1113550171871376446}
+  duration: 5
   hitDistance: 2
-  duration: 3
-  _animator: {fileID: 7428708136862856200}
+  agent: {fileID: 1113550171871376446}
 --- !u!95 &7428708136862856200
 Animator:
   serializedVersion: 3
@@ -130,7 +129,7 @@ Animator:
   m_GameObject: {fileID: 8679519890390831226}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: fa7f36c71b9e8fa4798df3a931c2fd92, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4146b1c54b446dd4d92eb9d487177dd0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

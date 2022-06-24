@@ -10,6 +10,7 @@ public class GameStateSelecting : GameState
     public override void Enter()
     {
         Debug.Log("StateSelecting");
+        GridManager.Instance.SpawnGrid();
     }
 
     public override void Exit()

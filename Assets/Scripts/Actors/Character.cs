@@ -9,11 +9,6 @@ public class Character : Actor
 {
     public Transform GridPosition { get; set; }
 
-    private void Start()
-    {
-        _currentHealth = _maxHealth;
-    }
-
     public void StateWalking()
     {
         _currentState.Exit();

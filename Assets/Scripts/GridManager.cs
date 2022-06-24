@@ -5,12 +5,13 @@ using System;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private GridData _data;
+    [SerializeField] private int _size;
+    [SerializeField] private int _width;
+    [SerializeField] private float _offset;
+
     [SerializeField] private Transform _gridTransform;
     [SerializeField] private Transform _squadTransform;
     [SerializeField] private GridSection _section;
-
-    private GridGenerator _generator;
 
     public Action<Character> OnCharacterSpawned;
 
@@ -24,13 +25,11 @@ public class GridManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _generator = new GridGenerator(_data, transform);
-        SpawnGrid();
     }
 
     public void SpawnGrid()
     {
-        foreach (var point in _generator.NextCoordinates())
+        foreach (var point in NextCoordinates())
         {
             var clone = Instantiate(_section);
             clone.transform.parent = _gridTransform;
@@ -48,5 +47,28 @@ public class GridManager : MonoBehaviour
         characterList.Add(character);
 
         OnCharacterSpawned?.Invoke(character);
+    }
+
+    private List<Vector3> CalculateGrid()
+    {
+        var positions = new List<Vector3>();
+
+        for (int i = 0; i <= (int)((_size - 1) / _width); i++)
+        {
+            for (int j = 0; j < _width; j++)
+            {
+                positions.Add(new Vector3((transform.position.x + j - Mathf.Ceil(_width / 2)) * _offset, 0, (transform.position.z - i) * _offset - _offset));
+            }
+        }
+
+        return positions;
+    }
+
+    public IEnumerable<Vector3> NextCoordinates()
+    {
+        foreach (var position in CalculateGrid())
+        {
+            yield return position;
+        }
     }
 }
