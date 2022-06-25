@@ -34,6 +34,15 @@ public class Character : Actor
         }
     }
 
+    public override void Fight()
+    {
+        _animator.SetBool(WALK, false);
+        _animator.SetBool(IDLE, true);
+
+        if (CheckDistance())
+            Attack();
+    }
+
     public override void Attack()
     {
         base.Attack();
@@ -53,6 +62,9 @@ public class Character : Actor
     {
         if (GridPosition != null)
         {
+            _animator.SetBool(IDLE, false);
+            _animator.SetBool(WALK, true);
+
             agent.SetDestination(GridPosition.position);
         }
     }

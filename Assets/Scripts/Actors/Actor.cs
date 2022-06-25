@@ -10,11 +10,14 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
     [SerializeField] protected float _maxHealth;
     [SerializeField] protected float _damage;
 
+    protected Animator _animator;
+
     public float duration;
     public float hitDistance;
     public NavMeshAgent agent;
 
     protected float _currentHealth;
+    protected float _currentTime;
     protected SelectableObject _selectable;
 
     protected ActorStateFighting _actorStateFighting;
@@ -45,17 +48,36 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
 
         agent = GetComponent<NavMeshAgent>();
 
+        _animator = GetComponent<Animator>();
+
         _currentHealth = _maxHealth;
+        _currentTime = duration;
     }
 
     public abstract void TakeDamage(float damage);
     public abstract void Die();
     public abstract void Move();
     public abstract void FindTarget();
+    public abstract void Fight();
 
     public virtual void Attack()
     {
-        Debug.Log(gameObject.name + " hit " + Target.name + " with " + _damage);
-        Target.TakeDamage(_damage);
+        _animator.SetBool(IDLE, true);
+
+        _currentTime -= Time.fixedDeltaTime;
+
+        if (_currentTime <= 0)
+        {
+            Debug.Log(gameObject.name + " hit " + Target.name + " with " + _damage);
+            Target.TakeDamage(_damage);
+        }
+    }
+
+    public bool CheckDistance()
+    {
+        if (Target == null)
+                return false;
+
+        return Vector3.Distance(transform.position, Target.transform.position) < hitDistance;
     }
 }

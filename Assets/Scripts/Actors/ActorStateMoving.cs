@@ -10,13 +10,6 @@ public class ActorStateMoving : ActorState
 
     public override void Enter()
     {
-        if (actor != null)
-        {
-            animator = actor.GetComponent<Animator>();
-            animator.SetBool(actor.WALK, true);
-        }
-
-        //actor.Move();
     }
 
     public override void Update()
@@ -26,7 +19,5 @@ public class ActorStateMoving : ActorState
 
     public override void Exit()
     {
-        if(actor != null)
-            animator.SetBool(actor.WALK, false);
     }
 }

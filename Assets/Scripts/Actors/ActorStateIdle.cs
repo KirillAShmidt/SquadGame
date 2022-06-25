@@ -12,8 +12,6 @@ public class ActorStateIdle : ActorState
 
     public override void Enter()
     {
-        animator = actor.GetComponent<Animator>();
-        animator.SetBool(actor.IDLE, true);
     }
 
     public override void Update()
@@ -22,7 +20,5 @@ public class ActorStateIdle : ActorState
 
     public override void Exit()
     {
-        if(animator != null)
-            animator.SetBool(actor.IDLE, false);
     }
 }

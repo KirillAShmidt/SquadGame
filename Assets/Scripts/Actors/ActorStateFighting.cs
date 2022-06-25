@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class ActorStateFighting : ActorState
 {
-    public List<Enemy> enemies;
-
     public ActorStateFighting(Actor actor) : base(actor)
     {
         this.actor = actor;
@@ -14,15 +12,18 @@ public class ActorStateFighting : ActorState
 
     public override void Enter()
     {
-        enemies = WayPoint.ActiveWaypoint.enemies;
-
-        animator = actor.GetComponent<Animator>();
-        animator.SetTrigger(actor.IDLE);
     }
 
     public override void Update()
     {
-
+        if (actor.Target == null && WayPoint.ActiveWaypoint)
+        {
+            actor.FindTarget();
+        }
+        else
+        {
+            actor.Fight();
+        }
     }
 
     public override void Exit()

@@ -4,7 +4,6 @@ using UnityEngine.AI;
 public abstract class ActorState
 {
     public Actor actor;
-    public Animator animator;
 
     public ActorState(Actor actor)
     {

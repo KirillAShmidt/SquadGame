@@ -24,19 +24,9 @@ public class Enemy : Actor
 
     public override void Move()
     {
-        if(Target == null)
-        {
-            FindTarget();
-        }
-        else
-        {
-            agent.SetDestination(Target.transform.position);
-
-            if (CheckDistance())
-                StateFighting();
-            /*else
-                StateMoving();*/
-        }
+        _animator.SetBool(IDLE, false);
+        _animator.SetBool(WALK, true);
+        agent.SetDestination(Target.transform.position);
     }
 
     public override void FindTarget()
@@ -47,15 +37,20 @@ public class Enemy : Actor
         {
             Target = characters[UnityEngine.Random.Range(0, characters.Count)];
             Target.OnActorDestroyed += FindTarget;
-            Target.OnActorDestroyed += StateMoving;
-
-            //StateMoving();
+            Target.OnActorDestroyed += StateFighting;
         }
     }
 
-    public bool CheckDistance()
+    public override void Fight()
     {
-        return Vector3.Distance(transform.position, Target.transform.position) < hitDistance;
+        _animator.SetBool(WALK, false);
+
+        if (CheckDistance())
+        {
+            Attack();
+        }
+        else
+            Move();
     }
 
     public override void TakeDamage(float damage)
@@ -79,7 +74,6 @@ public class Enemy : Actor
         _currentState.Exit();
         _currentState = _actorStateFighting;
         _currentState.Enter();
-        Attack();
     }
 
     public void StateMoving()

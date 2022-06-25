@@ -73,8 +73,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 10
   _damage: 10
-  duration: 3
-  hitDistance: 2
+  duration: 1
+  hitDistance: 1
   agent: {fileID: 5805616590286177020}
 --- !u!136 &775465621142527557
 CapsuleCollider:
