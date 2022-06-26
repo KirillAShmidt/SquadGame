@@ -17,13 +17,13 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
     public NavMeshAgent agent;
 
     protected float _currentHealth;
-    protected float _currentTime;
+    protected float _lastAttackTime = -99999f;
     protected SelectableObject _selectable;
 
-    protected ActorStateFighting _actorStateFighting;
-    protected ActorStateIdle _actorStateIdle;
-    protected ActorStateMoving _actorStateMoving;
-    protected ActorState _currentState;
+    public ActorStateFighting actorStateFighting;
+    public ActorStateIdle actorStateIdle;
+    public ActorStateMoving actorStateMoving;
+    public ActorState currentState;
 
     public readonly string IDLE = "idle";
     public readonly string WALK = "walk";
@@ -39,19 +39,18 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
         _selectable = GetComponent<SelectableObject>();
         _selectable.OnSelected += Die;
 
-        _actorStateFighting = new ActorStateFighting(this);
-        _actorStateIdle = new ActorStateIdle(this);
-        _actorStateMoving = new ActorStateMoving(this);
+        actorStateFighting = new ActorStateFighting(this);
+        actorStateIdle = new ActorStateIdle(this);
+        actorStateMoving = new ActorStateMoving(this);
 
-        _currentState = _actorStateIdle;
-        _currentState.Enter();
+        currentState = actorStateIdle;
+        currentState.Enter();
 
         agent = GetComponent<NavMeshAgent>();
 
         _animator = GetComponent<Animator>();
 
         _currentHealth = _maxHealth;
-        _currentTime = duration;
     }
 
     public abstract void TakeDamage(float damage);
@@ -64,13 +63,18 @@ public abstract class Actor : MonoBehaviour, IHaveHealth
     {
         _animator.SetBool(IDLE, true);
 
-        _currentTime -= Time.fixedDeltaTime;
-
-        if (_currentTime <= 0)
+        if(Time.time > _lastAttackTime + duration)
         {
-            Debug.Log(gameObject.name + " hit " + Target.name + " with " + _damage);
-            Target.TakeDamage(_damage);
+            _animator.SetTrigger(ATTACK);
+
+            _lastAttackTime = Time.time;
         }
+    }
+
+    public void AttackLand()
+    {
+        Debug.Log(gameObject.name + " hit " + Target.name + " with " + _damage);
+        Target.TakeDamage(_damage);
     }
 
     public bool CheckDistance()

@@ -16,7 +16,7 @@ public class GameStateWalking : GameState
 
         foreach (Character character in gameManager.characterList)
         {
-            character.StateWalking();
+            character.ChangeState(character.actorStateMoving);
         }
     }
 

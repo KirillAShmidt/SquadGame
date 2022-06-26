@@ -1,26 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using System;
 
 [RequireComponent(typeof(NavMeshAgent), typeof(SelectableObject))]
 public class Character : Actor
 {
     public Transform GridPosition { get; set; }
 
-    public void StateWalking()
+    public void ChangeState(ActorState state)
     {
-        _currentState.Exit();
-        _currentState = _actorStateMoving;
-        _currentState.Enter();
-    }
-
-    public void StateFighting()
-    {
-        _currentState.Exit();
-        _currentState = _actorStateFighting;
-        _currentState.Enter();
+        currentState.Exit();
+        currentState = state;
+        currentState.Enter();
     }
 
     public override void FindTarget()
@@ -77,6 +67,6 @@ public class Character : Actor
 
     private void FixedUpdate()
     {
-        _currentState.Update();
+        currentState.Update();
     }
 }

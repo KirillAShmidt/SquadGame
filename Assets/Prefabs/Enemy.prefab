@@ -53,7 +53,7 @@ NavMeshAgent:
   m_AngularSpeed: 720
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1
   m_BaseOffset: 0
@@ -114,10 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dec5a167c7414248a1f3739e5e7b2c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 12
+  _maxHealth: 10
   _damage: 2
-  duration: 5
-  hitDistance: 2
+  duration: 3
+  hitDistance: 1
   agent: {fileID: 1113550171871376446}
 --- !u!95 &7428708136862856200
 Animator:

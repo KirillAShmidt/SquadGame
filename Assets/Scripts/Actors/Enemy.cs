@@ -1,20 +1,13 @@
-using UnityEngine;
-using UnityEngine.AI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 public class Enemy : Actor
 {
     private void Start()
     {
-
         GetComponent<SelectableObject>().OnSelected += Die;
     }
 
     public void FixedUpdate()
     {
-        _currentState.Update();
+        currentState.Update();
     }
 
     public override void Attack()
@@ -26,6 +19,7 @@ public class Enemy : Actor
     {
         _animator.SetBool(IDLE, false);
         _animator.SetBool(WALK, true);
+
         agent.SetDestination(Target.transform.position);
     }
 
@@ -37,7 +31,6 @@ public class Enemy : Actor
         {
             Target = characters[UnityEngine.Random.Range(0, characters.Count)];
             Target.OnActorDestroyed += FindTarget;
-            Target.OnActorDestroyed += StateFighting;
         }
     }
 
@@ -69,24 +62,10 @@ public class Enemy : Actor
         Destroy(gameObject);
     }
 
-    public void StateFighting()
+    public void ChangeState(ActorState state)
     {
-        _currentState.Exit();
-        _currentState = _actorStateFighting;
-        _currentState.Enter();
-    }
-
-    public void StateMoving()
-    {
-        _currentState.Exit();
-        _currentState = _actorStateMoving;
-        _currentState.Enter();
-    }
-
-    public void StateIdle()
-    {
-        _currentState.Exit();
-        _currentState = _actorStateIdle;
-        _currentState.Enter();
+        currentState.Exit();
+        currentState = state;
+        currentState.Enter();
     }
 }

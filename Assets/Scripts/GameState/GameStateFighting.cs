@@ -19,7 +19,7 @@ public class GameStateFighting : GameState
         
         foreach(var unit in GridManager.Instance.characterList)
         {
-            unit.StateFighting();
+            unit.ChangeState(unit.actorStateFighting);
         }
     }
 

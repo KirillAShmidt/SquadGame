@@ -46,7 +46,7 @@ public class WayPoint : MonoBehaviour
     {
         foreach(Enemy enemy in enemies)
         {
-            enemy.StateFighting();
+            enemy.ChangeState(enemy.actorStateFighting);
         }
     }
 
